@@ -21,11 +21,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
 import static com.example.test.utils.Constants.*;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -38,18 +38,18 @@ public class TarefaService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    private final ModelMapper modelMapper = new ModelMapper();;
+    private final ModelMapper modelMapper = new ModelMapper();
 
     public ResponseEntity<TarefaOutDTO> persist (TarefaInDTO dto, UsuarioInfosDTO usuarioInfos) {
-        Optional<Usuario> byEmail = usuarioRepository.findByEmail(usuarioInfos.getEmail());
-        Tarefa map = modelMapper.map(dto, Tarefa.class);
-        byEmail.ifPresent(map::setUsuario);
-        map.setStatus(StatusEnum.PENDENTE);
-        return ResponseEntity.status(CREATED).body(modelMapper.map(repository.save(map), TarefaOutDTO.class));
+        Optional<Usuario> usuario = usuarioRepository.findByEmail(usuarioInfos.getEmail());
+        Tarefa tarefa = modelMapper.map(dto, Tarefa.class);
+        usuario.ifPresent(tarefa::setUsuario);
+        tarefa.setStatus(StatusEnum.PENDENTE);
+        return ResponseEntity.status(CREATED).body(modelMapper.map(repository.save(tarefa), TarefaOutDTO.class));
     }
 
-    public ResponseEntity<Page<TarefaOutDTO>> findAll(ParameterFind parameterFind) {
-        Page<Tarefa> tarefas = getAllTarefa(parameterFind);
+    public ResponseEntity<Page<TarefaOutDTO>> findAll(UsuarioInfosDTO usuarioInfos, ParameterFind parameterFind) {
+        Page<Tarefa> tarefas = getAllTarefaByUser(usuarioInfos, parameterFind);
         Page<TarefaOutDTO> tarefaFinalList = tarefas.map(tarefa -> modelMapper.map(tarefa, TarefaOutDTO.class));
         return ResponseEntity.ok(tarefaFinalList);
     }
@@ -88,11 +88,23 @@ public class TarefaService {
             throw new BadRequestException(TAREFA_NAO_PERTENCE_USUARIO);
     }
 
-    public Page<Tarefa> getAllTarefa(ParameterFind parameterFind) {
+    public Page<Tarefa> getAllTarefaByUser(UsuarioInfosDTO usuarioInfos, ParameterFind parameterFind) {
+        Optional<Usuario> usuario = usuarioRepository.findByEmail(usuarioInfos.getEmail());
+        if (usuario.isEmpty())
+            throw new NotFoundException(USUARIO_NAO_ENCONTRADO);
+        
+        if(isNull(parameterFind.getPage()))
+            parameterFind.setPage(0);
+
+        if(isNull(parameterFind.getSize()))
+            parameterFind.setSize(10);
+
         Pageable pageRequest = PageRequest.of(parameterFind.getPage(), parameterFind.getSize(), Sort.by("id").ascending());
         if (nonNull(parameterFind.getPrioridade()))
-            return repository.findByPrioridade(parameterFind.getPrioridade(), pageRequest);
-        return repository.findAll(pageRequest);
+            return repository.findByPrioridadeAndUsuarioIdAndStatus(parameterFind.getPrioridade(), usuario.get().getId(), StatusEnum.PENDENTE, pageRequest);
+
+        return repository.findByUsuarioIdAndStatus(usuario.get().getId(), StatusEnum.PENDENTE, pageRequest);
     }
+
 
 }

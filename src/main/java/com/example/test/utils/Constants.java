@@ -11,7 +11,8 @@ public class Constants {
 
     public static final String EMAIL_SENHA_INCORRETOS = "E-mail ou senha errados.";
 
-    public static final String SENHA_FRACA = "Senha fraca";
+    public static final String SENHA_FRACA = "Senha não corresponde aos requisitos mínimos de segurança. " +
+            "A senha deve conter letras maiúsculas, minúsculas, números e pelo menos 1 caractere especial EX:!@#$%&*" ;
     public static final String TOKEN_EXPIRADO = "Token expirado. Favor logar novamente.";
     public static final String TOKEN_NAO_INFORMADO = "Token não informado.";
 

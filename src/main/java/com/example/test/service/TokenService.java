@@ -4,6 +4,7 @@ import com.example.test.exception.NotFoundException;
 import com.example.test.exception.UnauthorizedException;
 import com.example.test.model.Token;
 import com.example.test.model.Usuario;
+import com.example.test.repository.TokenRepository;
 import com.example.test.repository.UsuarioRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -25,13 +26,24 @@ public class TokenService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private TokenRepository repository;
+
     public Token generateToken(String email) {
+        Optional<Token> byEmail = repository.findByEmail(email);
         String accessToken = Jwts.builder()
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setSubject(email)
                 .setExpiration(new Date(900000L))
                 .signWith(SignatureAlgorithm.HS256, email)
                 .compact();
+
+        if(byEmail.isPresent()) {
+            byEmail.get().setAccessToken(accessToken);
+            byEmail.get().setExpiracao(getExpiracaoToken(accessToken));
+            return repository.save(byEmail.get());
+        }
+
         return Token.builder()
                 .accessToken(accessToken)
                 .expiracao(getExpiracaoToken(accessToken))

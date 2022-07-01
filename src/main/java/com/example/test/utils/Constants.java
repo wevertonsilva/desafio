@@ -8,4 +8,10 @@ public class Constants {
     public static final String TAREFA_REMOVIDA_SUCESSO = "Tarefa Removida Com Sucesso";
     public static final String TAREFA_NAO_PERTENCE_USUARIO = "Esta Tarefa Não Pertence Ao Usuário";
 
+    public static final String EMAIL_SENHA_INCORRETOS = "E-mail ou senha errados.";
+
+    public static final String SENHA_FRACA = "Senha fraca";
+
+
+
 }

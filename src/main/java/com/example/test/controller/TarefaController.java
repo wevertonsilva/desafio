@@ -30,11 +30,18 @@ public class TarefaController extends BaseController{
         return service.persist(dto, usuarioInfos);
     }
 
-    @PutMapping()
+    @PutMapping
     @ApiOperation(nickname = "update", value = "update data", response = String.class, httpMethod = "PUT", authorizations = {@Authorization(value = "Bearer")})
     public ResponseEntity<TarefaOutDTO> update (@RequestBody @Valid TarefaUpdateDTO dto, HttpServletRequest request) throws Exception {
         UsuarioInfosDTO usuarioInfos = getUsuarioInfosByToken(request);
         return service.update(dto, usuarioInfos);
+    }
+
+    @PutMapping("/concluir-tarefa/{id}")
+    @ApiOperation(nickname = "concluir", value = "concluir tarefa", response = String.class, httpMethod = "PUT", authorizations = {@Authorization(value = "Bearer")})
+    public ResponseEntity<TarefaOutDTO> concluirTarefa (@PathVariable Long id, HttpServletRequest request) throws Exception {
+        UsuarioInfosDTO usuarioInfos = getUsuarioInfosByToken(request);
+        return service.concluirTarefa(id, usuarioInfos);
     }
 
     @DeleteMapping("/{id}")

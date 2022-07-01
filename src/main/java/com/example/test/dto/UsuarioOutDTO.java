@@ -22,4 +22,6 @@ public class UsuarioOutDTO {
 
     private String email;
 
+    private String accessToken;
+
 }

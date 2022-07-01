@@ -1,6 +1,7 @@
 package com.example.test.service;
 
 import com.example.test.dto.UsuarioInDTO;
+import com.example.test.dto.UsuarioLoginDTO;
 import com.example.test.dto.UsuarioOutDTO;
 import com.example.test.model.Usuario;
 import com.example.test.repository.UsuarioRepository;
@@ -14,6 +15,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.example.test.utils.Constants.*;
 import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -22,6 +24,9 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository repository;
+
+    @Autowired
+    private TokenService tokenService;
 
     private ModelMapper modelMapper = new ModelMapper();;
 
@@ -36,7 +41,7 @@ public class UsuarioService {
         Optional<Usuario> byEmail = repository.findByEmail(dto.getEmail());
         if (byEmail.isPresent())
             //throw exception
-            throw new Exception(Constants.USUARIO_JA_EXISTENTE);
+            throw new Exception(USUARIO_JA_EXISTENTE);
     }
 
     private String validaCriptografaSenha(String senha) throws Exception {
@@ -51,8 +56,19 @@ public class UsuarioService {
 
         if(!matches)
             //throw Exeception
-            throw new Exception("Senha fraca");
+            throw new Exception(SENHA_FRACA);
 
         return sha256Hex(senha);
     }
+
+    public ResponseEntity<UsuarioOutDTO> login(UsuarioLoginDTO dto) throws Exception {
+        Optional<Usuario> usuario = repository.findByEmail(dto.getEmail());
+        if (usuario.isEmpty() || !usuario.get().getSenha().equals(sha256Hex(dto.getSenha())))
+            throw new Exception(EMAIL_SENHA_INCORRETOS);
+
+        usuario.get().setAccessToken(tokenService.generateToken(dto.getEmail()));
+        repository.save(usuario.get());
+        return ResponseEntity.ok(modelMapper.map(usuario.get(), UsuarioOutDTO.class));
+    }
+
 }

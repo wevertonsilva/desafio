@@ -30,4 +30,6 @@ public class Usuario {
     @NotEmpty
     private String senha;
 
+    private String accessToken;
+
 }

@@ -1,7 +1,9 @@
 package com.example.test.service;
 
 import com.example.test.dto.UsuarioInDTO;
+import com.example.test.dto.UsuarioLoginDTO;
 import com.example.test.dto.UsuarioOutDTO;
+import com.example.test.exception.BadRequestException;
 import com.example.test.model.Usuario;
 import com.example.test.repository.UsuarioRepository;
 import org.modelmapper.ModelMapper;
@@ -13,34 +15,35 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.example.test.utils.Constants.*;
 import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @Service
 public class UsuarioService {
 
-    public static final String USUARIO_JA_EXISTENTE = "Usuário já existente";
-
     @Autowired
     private UsuarioRepository repository;
 
-    private ModelMapper modelMapper = new ModelMapper();;
+    @Autowired
+    private TokenService tokenService;
 
-    public ResponseEntity<UsuarioOutDTO> persist (UsuarioInDTO dto) throws Exception {
+    private ModelMapper modelMapper = new ModelMapper();
+
+    public ResponseEntity<UsuarioOutDTO> persist (UsuarioInDTO dto) {
         validateUserExists(dto);
         Usuario map = modelMapper.map(dto, Usuario.class);
         map.setSenha(validaCriptografaSenha(dto.getSenha()));
         return ResponseEntity.status(CREATED).body(modelMapper.map(repository.save(map), UsuarioOutDTO.class));
     }
 
-    private void validateUserExists(UsuarioInDTO dto) throws Exception {
+    private void validateUserExists(UsuarioInDTO dto) {
         Optional<Usuario> byEmail = repository.findByEmail(dto.getEmail());
         if (byEmail.isPresent())
-            //throw exception
-            throw new Exception(USUARIO_JA_EXISTENTE);
+            throw new BadRequestException(USUARIO_JA_EXISTENTE);
     }
 
-    private String validaCriptografaSenha(String senha) throws Exception {
+    private String validaCriptografaSenha(String senha) {
         String regex = "^(?=.*[0-9])"
                 + "(?=.*[a-z])(?=.*[A-Z])"
                 + "(?=.*[@#$%^&+=])"
@@ -51,9 +54,19 @@ public class UsuarioService {
         boolean matches = m.matches();
 
         if(!matches)
-            //throw Exeception
-            throw new Exception("Senha fraca");
+            throw new BadRequestException(SENHA_FRACA);
 
         return sha256Hex(senha);
     }
+
+    public ResponseEntity<UsuarioOutDTO> login(UsuarioLoginDTO dto) {
+        Optional<Usuario> usuario = repository.findByEmail(dto.getEmail());
+        if (usuario.isEmpty() || !usuario.get().getSenha().equals(sha256Hex(dto.getSenha())))
+            throw new BadRequestException(EMAIL_SENHA_INCORRETOS);
+
+        usuario.get().setToken(tokenService.generateToken(dto.getEmail()));
+        repository.save(usuario.get());
+        return ResponseEntity.ok(modelMapper.map(usuario.get(), UsuarioOutDTO.class));
+    }
+
 }

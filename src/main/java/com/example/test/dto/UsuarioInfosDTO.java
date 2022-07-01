@@ -5,22 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsuarioInDTO {
+public class UsuarioInfosDTO {
 
-    @NotBlank
-    private String nome;
-
-    @Email
-    @NotBlank
     private String email;
 
-    @NotBlank
-    private String senha;
 }

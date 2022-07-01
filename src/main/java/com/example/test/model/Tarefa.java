@@ -1,6 +1,7 @@
 package com.example.test.model;
 
 import com.example.test.enun.PrioridadeEnum;
+import com.example.test.enun.StatusEnum;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,5 +17,13 @@ public class Tarefa {
 
     private String descricao;
 
-    private PrioridadeEnum prioriodade;
+    @Enumerated(EnumType.STRING)
+    private PrioridadeEnum prioridade;
+
+    @Enumerated(EnumType.STRING)
+    private StatusEnum status;
+
+    @ManyToOne
+    @JoinColumn(name="usuario_id", nullable=false)
+    private Usuario usuario;
 }

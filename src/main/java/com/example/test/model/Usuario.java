@@ -28,4 +28,9 @@ public class Usuario {
     @NotNull
     @NotEmpty
     private String senha;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tokenId")
+    private Token token;
+
 }

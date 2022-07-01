@@ -1,11 +1,12 @@
 package com.example.test.dto;
 
+import com.example.test.enun.PrioridadeEnum;
+import com.example.test.enun.StatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -13,13 +14,14 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsuarioOutDTO {
-
+public class TarefaInDTO {
 
     private Long id;
 
-    private String nome;
+    @NotNull
+    @NotEmpty
+    private String descricao;
 
-    private String email;
-
+    @NotNull
+    private PrioridadeEnum prioridade;
 }

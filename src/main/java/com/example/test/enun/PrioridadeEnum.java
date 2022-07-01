@@ -3,10 +3,12 @@ package com.example.test.enun;
 public enum PrioridadeEnum {
 
     ALTA("Alta"),
-    MEDIA("Media"),
+    MEDIA("Média"),
     BAIXA("Baixa");
 
+    String value;
 
-    PrioridadeEnum(String name) {
+    PrioridadeEnum(String value) {
+        this.value =value;
     }
 }

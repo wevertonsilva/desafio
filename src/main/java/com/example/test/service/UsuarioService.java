@@ -4,6 +4,7 @@ import com.example.test.dto.UsuarioInDTO;
 import com.example.test.dto.UsuarioOutDTO;
 import com.example.test.model.Usuario;
 import com.example.test.repository.UsuarioRepository;
+import com.example.test.utils.Constants;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,6 @@ import static org.springframework.http.HttpStatus.CREATED;
 
 @Service
 public class UsuarioService {
-
-    public static final String USUARIO_JA_EXISTENTE = "Usuário já existente";
 
     @Autowired
     private UsuarioRepository repository;
@@ -37,7 +36,7 @@ public class UsuarioService {
         Optional<Usuario> byEmail = repository.findByEmail(dto.getEmail());
         if (byEmail.isPresent())
             //throw exception
-            throw new Exception(USUARIO_JA_EXISTENTE);
+            throw new Exception(Constants.USUARIO_JA_EXISTENTE);
     }
 
     private String validaCriptografaSenha(String senha) throws Exception {

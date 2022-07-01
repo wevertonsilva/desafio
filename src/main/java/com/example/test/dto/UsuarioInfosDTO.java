@@ -13,13 +13,10 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsuarioOutDTO {
-
+public class UsuarioInfosDTO {
 
     private Long id;
-
     private String nome;
-
     private String email;
 
 }

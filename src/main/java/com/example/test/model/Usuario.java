@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.time.OffsetDateTime;
 
 @Data
 @Entity
@@ -30,6 +30,8 @@ public class Usuario {
     @NotEmpty
     private String senha;
 
-    private String accessToken;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tokenId")
+    private Token token;
 
 }

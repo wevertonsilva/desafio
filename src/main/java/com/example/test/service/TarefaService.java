@@ -5,21 +5,28 @@ import com.example.test.dto.TarefaOutDTO;
 import com.example.test.dto.TarefaUpdateDTO;
 import com.example.test.dto.UsuarioInfosDTO;
 import com.example.test.enun.StatusEnum;
+import com.example.test.exception.BadRequestException;
+import com.example.test.exception.NotFoundException;
 import com.example.test.model.Tarefa;
 import com.example.test.model.Usuario;
 import com.example.test.repository.TarefaRepository;
 import com.example.test.repository.UsuarioRepository;
+import com.example.test.utils.ParameterFind;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
 import static com.example.test.utils.Constants.*;
-import static java.util.Objects.*;
-import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
+import static java.util.Objects.nonNull;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @Service
@@ -33,49 +40,59 @@ public class TarefaService {
 
     private final ModelMapper modelMapper = new ModelMapper();;
 
-    public ResponseEntity<TarefaOutDTO> persist (TarefaInDTO dto, UsuarioInfosDTO usuarioInfos) throws Exception {
-        Optional<Usuario> byId = usuarioRepository.findById(usuarioInfos.getId());
+    public ResponseEntity<TarefaOutDTO> persist (TarefaInDTO dto, UsuarioInfosDTO usuarioInfos) {
+        Optional<Usuario> byEmail = usuarioRepository.findByEmail(usuarioInfos.getEmail());
         Tarefa map = modelMapper.map(dto, Tarefa.class);
-        if(byId.isPresent())
-            map.setUsuario(byId.get());
+        byEmail.ifPresent(map::setUsuario);
         map.setStatus(StatusEnum.PENDENTE);
         return ResponseEntity.status(CREATED).body(modelMapper.map(repository.save(map), TarefaOutDTO.class));
     }
 
-    public ResponseEntity<TarefaOutDTO> update(TarefaUpdateDTO dto, UsuarioInfosDTO usuarioInfos) throws Exception {
-        Tarefa tarefa = getTarefa(dto.getId());
-        validateTarefa(tarefa, usuarioInfos);
+    public ResponseEntity<Page<TarefaOutDTO>> findAll(ParameterFind parameterFind) {
+        Page<Tarefa> tarefas = getAllTarefa(parameterFind);
+        Page<TarefaOutDTO> tarefaFinalList = tarefas.map(tarefa -> modelMapper.map(tarefa, TarefaOutDTO.class));
+        return ResponseEntity.ok(tarefaFinalList);
+    }
+
+    public ResponseEntity<TarefaOutDTO> update(TarefaUpdateDTO dto, UsuarioInfosDTO usuarioInfos) {
+        Tarefa tarefa = getTarefa(dto.getId(), usuarioInfos);
         tarefa.setDescricao(nonNull(dto.getDescricao()) ? dto.getDescricao() : tarefa.getDescricao());
         tarefa.setPrioridade(nonNull(dto.getPrioridade()) ? dto.getPrioridade() : tarefa.getPrioridade());
         return ResponseEntity.ok(modelMapper.map(repository.save(tarefa), TarefaOutDTO.class));
     }
 
-    public ResponseEntity<TarefaOutDTO> concluirTarefa(Long id, UsuarioInfosDTO usuarioInfos) throws Exception {
-        Tarefa tarefa = getTarefa(id);
-        validateTarefa(tarefa, usuarioInfos);
+    public ResponseEntity<TarefaOutDTO> concluirTarefa(Long id, UsuarioInfosDTO usuarioInfos) {
+        Tarefa tarefa = getTarefa(id, usuarioInfos);
         tarefa.setStatus(StatusEnum.CONCLUIDA);
         return ResponseEntity.ok(modelMapper.map(repository.save(tarefa), TarefaOutDTO.class));
     }
 
-    public ResponseEntity<Object> delete (Long id, UsuarioInfosDTO usuarioInfos) throws Exception {
-        Tarefa tarefa = getTarefa(id);
-        validateTarefa(tarefa, usuarioInfos);
+    public ResponseEntity<Object> delete (Long id, UsuarioInfosDTO usuarioInfos) {
+        Tarefa tarefa = getTarefa(id, usuarioInfos);
         repository.delete(tarefa);
         return ResponseEntity.ok(TAREFA_REMOVIDA_SUCESSO);
     }
 
-    private Tarefa getTarefa(Long id) throws Exception {
+    private Tarefa getTarefa(Long id, UsuarioInfosDTO usuarioInfos) {
         Optional<Tarefa> tarefa = repository.findById(id);
 
         if(tarefa.isEmpty())
-            throw new Exception(TAREFA_NAO_ENCONTRADA);
+            throw new NotFoundException(TAREFA_NAO_ENCONTRADA);
 
+        validateTarefa(tarefa.get(), usuarioInfos);
         return tarefa.get();
     }
 
-    private void validateTarefa(Tarefa tarefa, UsuarioInfosDTO usuarioInfos) throws Exception {
-        if(!Objects.equals(tarefa.getUsuario().getId(), usuarioInfos.getId()))
-            throw new Exception(TAREFA_NAO_PERTENCE_USUARIO);
+    private void validateTarefa(Tarefa tarefa, UsuarioInfosDTO usuarioInfos) {
+        if(!Objects.equals(tarefa.getUsuario().getEmail(), usuarioInfos.getEmail()))
+            throw new BadRequestException(TAREFA_NAO_PERTENCE_USUARIO);
+    }
+
+    public Page<Tarefa> getAllTarefa(ParameterFind parameterFind) {
+        Pageable pageRequest = PageRequest.of(parameterFind.getPage(), parameterFind.getSize(), Sort.by("id").ascending());
+        if (nonNull(parameterFind.getPrioridade()))
+            return repository.findByPrioridade(parameterFind.getPrioridade(), pageRequest);
+        return repository.findAll(pageRequest);
     }
 
 }

@@ -1,5 +1,7 @@
 Passos para rodar a aplicação com banco local (H2)
 
+OBS.: Para garantir que está usando a ultima versão do cógigo, favor usar a branch develop
+
 1. Configurar o H2 no seu application.properties
 ```
 spring.h2.console.enabled=true

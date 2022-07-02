@@ -16,7 +16,4 @@ public interface TarefaRepository extends JpaRepository<Tarefa, Long> {
 
    Page<Tarefa> findByPrioridadeAndUsuarioIdAndStatus(PrioridadeEnum prioridade, Long id, StatusEnum status, Pageable pageRequest);
 
-//   @Query("Select t From tarefa t where t.usuario = :id and t.status = :status and t.prioridade = ")
-//   Page<Tarefa> teste(Long id, StatusEnum status);
-
 }

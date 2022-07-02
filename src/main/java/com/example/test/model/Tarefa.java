@@ -5,6 +5,7 @@ import com.example.test.enun.StatusEnum;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @Entity
@@ -15,11 +16,14 @@ public class Tarefa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String descricao;
 
+    @NotBlank
     @Enumerated(EnumType.STRING)
     private PrioridadeEnum prioridade;
 
+    @NotBlank
     @Enumerated(EnumType.STRING)
     private StatusEnum status;
 

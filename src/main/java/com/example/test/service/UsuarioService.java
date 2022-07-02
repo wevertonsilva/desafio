@@ -28,7 +28,7 @@ public class UsuarioService {
     @Autowired
     private TokenService tokenService;
 
-    private ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper = new ModelMapper();
 
     public ResponseEntity<UsuarioOutDTO> persist (UsuarioInDTO dto) {
         validateUserExists(dto);

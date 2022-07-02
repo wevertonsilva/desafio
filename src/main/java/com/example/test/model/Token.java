@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.OffsetDateTime;
 
 @Data
@@ -18,16 +19,15 @@ public class Token {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
     private Long id;
 
-    @Column
+    @NotBlank
     private String accessToken;
 
-    @Column
+    @NotBlank
     private OffsetDateTime expiracao;
 
-    @Column
+    @NotBlank
     private String email;
 
 }

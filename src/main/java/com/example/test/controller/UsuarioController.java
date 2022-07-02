@@ -5,8 +5,6 @@ import com.example.test.dto.UsuarioLoginDTO;
 import com.example.test.dto.UsuarioOutDTO;
 import com.example.test.service.UsuarioService;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -7,7 +7,6 @@ import com.example.test.dto.UsuarioInfosDTO;
 import com.example.test.enun.PrioridadeEnum;
 import com.example.test.service.TarefaService;
 import com.example.test.utils.ParameterFind;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;

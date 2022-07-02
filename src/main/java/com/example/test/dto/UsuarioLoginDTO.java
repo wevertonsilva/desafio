@@ -15,7 +15,7 @@ public class UsuarioLoginDTO {
     private String email;
 
     @NotBlank
-    @ApiModelProperty(notes = "Senha de usuário", example = "senha123", required = true)
+    @ApiModelProperty(notes = "Senha de usuário", example = "Senha.123", required = true)
     private String senha;
 
 }

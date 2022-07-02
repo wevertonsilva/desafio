@@ -1,5 +1,6 @@
 package com.example.test.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,12 +16,15 @@ import javax.validation.constraints.NotBlank;
 public class UsuarioInDTO {
 
     @NotBlank
+    @ApiModelProperty(notes = "Nome da pessoa", example = "Weverton", required = true)
     private String nome;
 
     @Email
     @NotBlank
+    @ApiModelProperty(notes = "Email de usuário", example = "weverton@email.com", required = true)
     private String email;
 
     @NotBlank
+    @ApiModelProperty(notes = "Senha de usuário", example = "senha123", required = true)
     private String senha;
 }

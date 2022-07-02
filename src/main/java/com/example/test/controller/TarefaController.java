@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-@Api(value = "ALOOOO")
 @RestController
 @RequestMapping("/tarefa")
 public class TarefaController extends BaseController{

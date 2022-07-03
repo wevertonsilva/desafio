@@ -4,7 +4,7 @@ import com.example.test.dto.UsuarioInDTO;
 import com.example.test.dto.UsuarioLoginDTO;
 import com.example.test.dto.UsuarioOutDTO;
 import com.example.test.exception.BadRequestException;
-import com.example.test.model.Usuario;
+import com.example.test.repository.model.Usuario;
 import com.example.test.repository.UsuarioRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

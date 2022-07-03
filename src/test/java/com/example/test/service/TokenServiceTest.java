@@ -2,8 +2,8 @@ package com.example.test.service;
 
 import com.example.test.exception.NotFoundException;
 import com.example.test.exception.UnauthorizedException;
-import com.example.test.model.Token;
-import com.example.test.model.Usuario;
+import com.example.test.repository.model.Token;
+import com.example.test.repository.model.Usuario;
 import com.example.test.repository.TokenRepository;
 import com.example.test.repository.UsuarioRepository;
 import lombok.Data;
@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 

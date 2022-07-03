@@ -2,8 +2,8 @@ package com.example.test.service;
 
 import com.example.test.exception.NotFoundException;
 import com.example.test.exception.UnauthorizedException;
-import com.example.test.model.Token;
-import com.example.test.model.Usuario;
+import com.example.test.repository.model.Token;
+import com.example.test.repository.model.Usuario;
 import com.example.test.repository.TokenRepository;
 import com.example.test.repository.UsuarioRepository;
 import io.jsonwebtoken.Jwts;

@@ -1,4 +1,4 @@
-package com.example.test.model;
+package com.example.test.repository.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -10,13 +10,15 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import static com.example.test.utils.Constants.CAMPO_OBRIGATORIO;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TarefaInDTO {
 
-    @NotBlank
+    @NotBlank(message = CAMPO_OBRIGATORIO)
     @ApiModelProperty(notes = "Descrição da tarefa", example = "Fazer café", required = true)
     private String descricao;
 

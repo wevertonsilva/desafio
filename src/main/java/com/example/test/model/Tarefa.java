@@ -6,6 +6,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
@@ -19,11 +20,11 @@ public class Tarefa {
     @NotBlank
     private String descricao;
 
-    @NotBlank
+    @NotNull
     @Enumerated(EnumType.STRING)
     private PrioridadeEnum prioridade;
 
-    @NotBlank
+    @NotNull
     @Enumerated(EnumType.STRING)
     private StatusEnum status;
 

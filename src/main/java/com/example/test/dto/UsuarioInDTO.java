@@ -1,6 +1,5 @@
 package com.example.test.dto;
 
-import com.example.test.utils.Constants;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +9,8 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-import static com.example.test.utils.Constants.*;
+import static com.example.test.utils.Constants.CAMPO_OBRIGATORIO;
+import static com.example.test.utils.Constants.EMAIL_INVALIDO;
 
 @Data
 @Builder

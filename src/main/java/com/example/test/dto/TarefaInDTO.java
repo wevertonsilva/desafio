@@ -22,7 +22,7 @@ public class TarefaInDTO {
     @ApiModelProperty(notes = "Descrição da tarefa", example = "Fazer café", required = true)
     private String descricao;
 
-    @NotNull
+    @NotNull(message = CAMPO_OBRIGATORIO)
     @ApiModelProperty(notes = "Prioridade da tarefa", example = "ALTA", required = true)
     private PrioridadeEnum prioridade;
 }

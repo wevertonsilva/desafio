@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 
 @Data
@@ -24,7 +25,7 @@ public class Token {
     @NotBlank
     private String accessToken;
 
-    @NotBlank
+    @NotNull
     private OffsetDateTime expiracao;
 
     @NotBlank

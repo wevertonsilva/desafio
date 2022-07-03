@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import static com.example.test.utils.Constants.CAMPO_OBRIGATORIO;
@@ -18,7 +17,7 @@ import static com.example.test.utils.Constants.CAMPO_OBRIGATORIO;
 @AllArgsConstructor
 public class TarefaUpdateDTO {
 
-    @NotBlank(message = CAMPO_OBRIGATORIO)
+    @NotNull(message = CAMPO_OBRIGATORIO)
     @ApiModelProperty(notes = "Id da tarefa", example = "1", required = true)
     private Long id;
 

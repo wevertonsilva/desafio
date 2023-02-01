@@ -1,6 +1,7 @@
 Passos para rodar a aplicação com banco local (H2)
 
-OBS.: Para garantir que está usando a ultima versão do cógigo, favor usar a branch develop
+OBS.: Para garantir que está usando a ultima versão do cógigo, favor usar a branch develop.
+
 OBS.: É necessário executar a criação de um novo usuário e realizar o login para gerar o token do usuário. Este token deve ser usado para o envio de requisições (com exceção das rotas de usuário).
 
 1. Configurar o H2 no seu application.properties

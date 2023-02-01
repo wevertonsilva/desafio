@@ -2,8 +2,8 @@ package com.example.test.service;
 
 import com.example.test.exception.NotFoundException;
 import com.example.test.exception.UnauthorizedException;
-import com.example.test.model.Token;
-import com.example.test.model.Usuario;
+import com.example.test.repository.model.Token;
+import com.example.test.repository.model.Usuario;
 import com.example.test.repository.TokenRepository;
 import com.example.test.repository.UsuarioRepository;
 import io.jsonwebtoken.Jwts;
@@ -29,6 +29,8 @@ public class TokenService {
     @Autowired
     private TokenRepository repository;
 
+    private final String BEARER = "Bearer ";
+
     public Token generateToken(String email) {
         Optional<Token> byEmail = repository.findByEmail(email);
         String accessToken = Jwts.builder()
@@ -53,14 +55,14 @@ public class TokenService {
 
     @SneakyThrows
     public String decodeToken(String tokenNew) {
-        tokenNew = tokenNew.replace("Bearer ", "");
+        tokenNew = tokenNew.replace(BEARER, "");
         String[] splitString = tokenNew.split("\\.");
         Base64 base64Url = new Base64(true);
         return new String(base64Url.decode(splitString[1]));
     }
 
     public OffsetDateTime getExpiracaoToken(String token) {
-        token = token.replace("Bearer ", "");
+        token = token.replace(BEARER, "");
         String s = decodeToken(token);
         Long segundos = Long.parseLong(s.split("\"exp\":")[1].split("}")[0]);
         return OffsetDateTime.now().plusSeconds(segundos);

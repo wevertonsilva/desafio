@@ -4,7 +4,7 @@ import com.example.test.dto.UsuarioInDTO;
 import com.example.test.dto.UsuarioLoginDTO;
 import com.example.test.dto.UsuarioOutDTO;
 import com.example.test.exception.BadRequestException;
-import com.example.test.model.Usuario;
+import com.example.test.repository.model.Usuario;
 import com.example.test.repository.UsuarioRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class UsuarioService {
     @Autowired
     private TokenService tokenService;
 
-    private ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper = new ModelMapper();
 
     public ResponseEntity<UsuarioOutDTO> persist (UsuarioInDTO dto) {
         validateUserExists(dto);
@@ -46,7 +46,7 @@ public class UsuarioService {
     private String validaCriptografaSenha(String senha) {
         String regex = "^(?=.*[0-9])"
                 + "(?=.*[a-z])(?=.*[A-Z])"
-                + "(?=.*[@#$%^&+=])"
+                + "(?=.*[@#$%^&+=.*!?])"
                 + "(?=\\S+$).{8,20}$";
 
         Pattern p = Pattern.compile(regex);

@@ -3,16 +3,14 @@ package com.example.test.service;
 import com.example.test.dto.UsuarioInDTO;
 import com.example.test.dto.UsuarioLoginDTO;
 import com.example.test.exception.BadRequestException;
-import com.example.test.model.Usuario;
+import com.example.test.repository.model.Usuario;
 import com.example.test.repository.UsuarioRepository;
 import lombok.Data;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 

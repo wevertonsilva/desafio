@@ -7,7 +7,6 @@ import com.example.test.dto.UsuarioInfosDTO;
 import com.example.test.enun.PrioridadeEnum;
 import com.example.test.service.TarefaService;
 import com.example.test.utils.ParameterFind;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-@Api(value = "ALOOOO")
 @RestController
 @RequestMapping("/tarefa")
 public class TarefaController extends BaseController{

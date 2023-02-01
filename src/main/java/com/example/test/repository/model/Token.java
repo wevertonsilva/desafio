@@ -1,4 +1,4 @@
-package com.example.test.model;
+package com.example.test.repository.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 
 @Data
@@ -18,16 +20,15 @@ public class Token {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
     private Long id;
 
-    @Column
+    @NotBlank
     private String accessToken;
 
-    @Column
+    @NotNull
     private OffsetDateTime expiracao;
 
-    @Column
+    @NotBlank
     private String email;
 
 }

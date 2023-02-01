@@ -7,8 +7,8 @@ import com.example.test.dto.UsuarioInfosDTO;
 import com.example.test.enun.StatusEnum;
 import com.example.test.exception.BadRequestException;
 import com.example.test.exception.NotFoundException;
-import com.example.test.model.Tarefa;
-import com.example.test.model.Usuario;
+import com.example.test.repository.model.Tarefa;
+import com.example.test.repository.model.Usuario;
 import com.example.test.repository.TarefaRepository;
 import com.example.test.repository.UsuarioRepository;
 import com.example.test.utils.ParameterFind;
@@ -25,7 +25,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.example.test.utils.Constants.*;
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -37,6 +36,10 @@ public class TarefaService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    public static final Integer PAGE = 0;
+
+    public static final Integer SIZE = 10;
 
     private final ModelMapper modelMapper = new ModelMapper();
 
@@ -92,12 +95,9 @@ public class TarefaService {
         Optional<Usuario> usuario = usuarioRepository.findByEmail(usuarioInfos.getEmail());
         if (usuario.isEmpty())
             throw new NotFoundException(USUARIO_NAO_ENCONTRADO);
-        
-        if(isNull(parameterFind.getPage()))
-            parameterFind.setPage(0);
 
-        if(isNull(parameterFind.getSize()))
-            parameterFind.setSize(10);
+        parameterFind.setPage(Objects.isNull(parameterFind.getPage()) ? PAGE : parameterFind.getPage());
+        parameterFind.setSize(Objects.isNull(parameterFind.getSize()) ? SIZE : parameterFind.getSize());
 
         Pageable pageRequest = PageRequest.of(parameterFind.getPage(), parameterFind.getSize(), Sort.by("id").ascending());
         if (nonNull(parameterFind.getPrioridade()))
